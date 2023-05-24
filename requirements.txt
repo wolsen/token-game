@@ -1,3 +1,6 @@
+aiofiles
 fastapi
+jinja2
 pydantic
+python-multipart
 uvicorn[standard]

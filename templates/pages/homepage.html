@@ -1,0 +1,36 @@
+{% extends "pages/base.html" %}
+
+{% block title %} 
+  <title>OpenInfra Sunbeam Game</title>
+{% endblock %} 
+
+{% block content %} 
+  <div class="container">
+    <h1 class="display-6">Validate Game Token</h1>
+    <form method="GET">
+        <div class="mb-3">
+            <label for="token" class="form-label">Game Token</label>
+            <input type="text" class="form-control" id="token" name="token"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+  <br/>
+  {% if token %}
+  <div class="container">
+    {% if valid %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>Woohoo!</strong> Token {{ token }} is valid. Thanks for trying Sunbeam. Get some
+        free stuff!
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% else %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      Hmm, that token you entered "{{ token }}" doesn't appear to be valid. Go back and try again.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+{% endblock %} 
