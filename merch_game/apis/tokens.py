@@ -32,11 +32,13 @@ AVAIL_TOKENS = list()
 USED_TOKENS_FILE = Path('used-tokens.txt')
 USED_TOKENS = list()
 
+MAX_TOKENS = 2000
+
 
 # Generate a set of new tokens available for use
 if not AVAIL_TOKENS_FILE.exists():
     with open(AVAIL_TOKENS_FILE, 'a') as f:
-        for i in range(0, 1000):
+        for i in range(0, MAX_TOKENS):
             token = str(uuid4())[:8]
             f.write(f"{token}\n")
             AVAIL_TOKENS.append(token)
