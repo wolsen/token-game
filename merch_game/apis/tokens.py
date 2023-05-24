@@ -35,7 +35,7 @@ USED_TOKENS = list()
 
 # Generate a set of new tokens available for use
 if not AVAIL_TOKENS_FILE.exists():
-    with open(AVAIL_TOKENS_FILE, 'w+') as f:
+    with open(AVAIL_TOKENS_FILE, 'a') as f:
         for i in range(0, 1000):
             token = str(uuid4())[:8]
             f.write(f"{token}\n")
@@ -67,7 +67,7 @@ def create_token() -> Token:
     :return: a game Token that is valid for redemption
     """
     token = Token(value=str(random.choice(AVAIL_TOKENS)))
-    with open(USED_TOKENS_FILE, 'w+') as f:
+    with open(USED_TOKENS_FILE, 'a') as f:
         f.write(f"{token.value}\n")
         USED_TOKENS.append(token.value)
 
