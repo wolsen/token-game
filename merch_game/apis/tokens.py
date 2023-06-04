@@ -33,7 +33,8 @@ AVAIL_TOKENS = list()
 USED_TOKENS_FILE = Path("used-tokens.txt")
 USED_TOKENS = list()
 
-MAX_TOKENS = 2000
+MAX_TOKENS = 1000
+MAX_ATTEMPTS = 5
 
 
 # Generate a set of new tokens available for use
@@ -70,7 +71,11 @@ def create_token() -> Token:
 
     :return: a game Token that is valid for redemption
     """
-    token = Token(value=str(random.choice(AVAIL_TOKENS)))
+    for i in range(0, MAX_ATTEMPTS):
+        token = Token(value=str(random.choice(AVAIL_TOKENS)))
+        if token.value not in USED_TOKENS:
+            break
+
     with open(USED_TOKENS_FILE, "a") as f:
         f.write(f"{token.value}\n")
         USED_TOKENS.append(token.value)
