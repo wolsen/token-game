@@ -16,8 +16,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from merch_game.apis import pages
-from merch_game.apis import tokens
+from merch_game.apis import pages, tokens
 
 
 def include_router(application):
@@ -26,12 +25,11 @@ def include_router(application):
 
 
 def configure_static(app):
-    app.mount("/static", StaticFiles(directory="static"), name="static")
+    app.mount("/static", StaticFiles(directory="templates"), name="static")
 
 
 def start_application():
-    application = FastAPI(title="OpenInfra Sunbeam Merch Game",
-                          version="0.1")
+    application = FastAPI(title="OpenInfra Sunbeam Merch Game", version="0.1")
     include_router(application)
     configure_static(application)
     return application
@@ -40,6 +38,6 @@ def start_application():
 app = start_application()
 
 
-@app.get('/version')
+@app.get("/version")
 async def root():
     return {"version": 0.1}

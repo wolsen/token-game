@@ -15,12 +15,10 @@
 
 from typing import Union
 
-from fastapi import APIRouter
-from fastapi import Request
+from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
 
 from merch_game.apis.tokens import validate_token
-
 
 templates = Jinja2Templates(directory="templates")
 pages_router = APIRouter()
@@ -31,9 +29,8 @@ async def home(request: Request, token: Union[str, None] = None):
     valid = False
     if token:
         data = validate_token(token)
-        valid = data.get('valid', False)
+        valid = data.get("valid", False)
 
     return templates.TemplateResponse(
-        "pages/homepage.html",
-        {"request": request, "token": token, "valid": valid}
+        "pages/homepage.html", {"request": request, "token": token, "valid": valid}
     )

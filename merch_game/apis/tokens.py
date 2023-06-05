@@ -14,10 +14,11 @@
 # limitations under the License.
 
 import random
-from pydantic import BaseModel
-from fastapi import APIRouter
-from uuid import uuid4
 from pathlib import Path
+from uuid import uuid4
+
+from fastapi import APIRouter
+from pydantic import BaseModel
 
 
 class Token(BaseModel):
@@ -26,29 +27,32 @@ class Token(BaseModel):
 
 tokens_router = APIRouter()
 
-AVAIL_TOKENS_FILE = Path('avail-tokens.txt')
+AVAIL_TOKENS_FILE = Path("avail-tokens.txt")
 AVAIL_TOKENS = list()
 
-USED_TOKENS_FILE = Path('used-tokens.txt')
+USED_TOKENS_FILE = Path("used-tokens.txt")
 USED_TOKENS = list()
+
+MAX_TOKENS = 1000
+MAX_ATTEMPTS = 5
 
 
 # Generate a set of new tokens available for use
 if not AVAIL_TOKENS_FILE.exists():
-    with open(AVAIL_TOKENS_FILE, 'w+') as f:
-        for i in range(0, 1000):
+    with open(AVAIL_TOKENS_FILE, "a") as f:
+        for i in range(0, MAX_TOKENS):
             token = str(uuid4())[:8]
             f.write(f"{token}\n")
             AVAIL_TOKENS.append(token)
 else:
-    with open(AVAIL_TOKENS_FILE, 'r') as f:
+    with open(AVAIL_TOKENS_FILE, "r") as f:
         for line in f.readlines():
             AVAIL_TOKENS.append(line.strip())
 
 
 # Load any used tokens
 if USED_TOKENS_FILE.exists():
-    with open(USED_TOKENS_FILE, 'r') as f:
+    with open(USED_TOKENS_FILE, "r") as f:
         for line in f.readlines():
             USED_TOKENS.append(line.strip())
 
@@ -57,7 +61,8 @@ if USED_TOKENS_FILE.exists():
 # async def root():
 #     return {"version": 0.1}
 
-@tokens_router.post('/token')
+
+@tokens_router.post("/token")
 def create_token() -> Token:
     """Generates a new token to hand out for the game.
 
@@ -66,15 +71,19 @@ def create_token() -> Token:
 
     :return: a game Token that is valid for redemption
     """
-    token = Token(value=str(random.choice(AVAIL_TOKENS)))
-    with open(USED_TOKENS_FILE, 'w+') as f:
+    for i in range(0, MAX_ATTEMPTS):
+        token = Token(value=str(random.choice(AVAIL_TOKENS)))
+        if token.value not in USED_TOKENS:
+            break
+
+    with open(USED_TOKENS_FILE, "a") as f:
         f.write(f"{token.value}\n")
         USED_TOKENS.append(token.value)
 
     return token
 
 
-@tokens_router.get('/validate/{token}')
+@tokens_router.get("/validate/{token}")
 def validate_token(token: str):
     """Validates the provided token
 
