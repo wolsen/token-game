@@ -4,3 +4,12 @@ avail-tokens.txt
 used-tokens.txt
 .tox/
 .venv/
+
+.eggs/
+AUTHORS
+ChangeLog
+dist/
+build/
+merch_game.egg-info/
+
+*.rock

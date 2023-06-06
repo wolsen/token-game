@@ -1,0 +1,28 @@
+name: merch-game
+summary: OpenStack Summit Sunbeam Merch Game
+license: Apache-2.0
+description: |
+  OpenStack Summit Sunbeam Merch game rock. Spin this
+  rock up to generate and feed tokens.
+version: 0.1
+
+base: ubuntu:22.04
+platforms:
+  amd64:
+
+services:
+  uvicorn:
+    override: replace
+    command: uvicorn merch_game.main:start_application --host 0.0.0.0 --port 8080
+    startup: enabled
+
+parts:
+  oif-merch-game:
+    plugin: python
+    source: .
+    stage-packages:
+      - python3-venv
+    build-packages:
+      - git
+      - libssl-dev
+      - gcc
