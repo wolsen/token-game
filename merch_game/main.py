@@ -26,6 +26,7 @@ def include_router(application):
 
 def configure_static(app):
     app.mount("/static", StaticFiles(directory="templates"), name="static")
+    app.mount("/images", StaticFiles(directory="static/images"), name="images")
 
 
 def start_application():
